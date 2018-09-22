@@ -1,47 +1,47 @@
 #include "common.h"
 #include "my_data_struct.h"
  
-class Matrix {
+template <class T>
+void rotateMatrix(Matrix<T>& M) {
+    size_t matrixWidth = M.size() - 1;
+    size_t layerWidth = M.size()/2;
+    for (size_t i = 0 ; i < layerWidth; ++i) {
+        for(size_t j = i; j < matrixWidth - i  ; ++j) {
+            T& topLeft = M[i][j];
+            T& botLeft = M[matrixWidth - j][i];
+            T& botRigh = M[matrixWidth - i][matrixWidth - j];
+            T& topRigh = M[j][matrixWidth - i];
 
-    ArrayList<ArrayList<string>> m_matrix;
-public:
+            T tmp = topLeft;
+            topLeft = botLeft;
+            botLeft = botRigh;
+            botRigh = topRigh;
+            topRigh = tmp;
+        }
+    }
+}
+
+int main(int argc, char** argv) {
     
-    Matrix(size_t n): m_matrix(n) {
-        size_t i = n;
-        while(i-- != 0) {
-            m_matrix[i-1] = ArrayList<string>(n);
-        }
+    size_t matrixSize = 6;
+    if (argc == 2) {
+        matrixSize = atoi(argv[1]);
     }
 
-    ArrayList<string>& 
-    operator[](size_t n) const { 
-        if(n >= m_matrix.size()) {
-            ss s;
-            s << "Out of bounds: " << n << ", size = " << m_matrix.size();
-            throw new std::runtime_error(s.str());
-        }
-
-
-        return m_matrix[n];
-    }
-};
-
-int main() {
-
-    Matrix M(5);
+    Matrix<string> M = createMatrix<string>(matrixSize);
     ss s;
-    for(unsigned i = 0; i < 5; ++i) {
-        for (unsigned j = 0; j < 5; ++j) {
+    for(unsigned i = 0; i < matrixSize; ++i) {
+        for (unsigned j = 0; j < matrixSize; ++j) {
             s << (char)('a' + i) << j;
-            M[i][j] =  s.str();
+            M[i][j] = s.str();
             s.str("");
         }
     }
 
-    for(uint32_t i = 0; i < 5; ++i) {
-        for(uint32_t j = 0; j < 5; ++j) {
-            cout << M[i][j] << " ";
-        }
-        cout << endl;
-    }
+    cout << "Matrix before:\n" << M;
+    rotateMatrix(M);
+    cout << "Matrix after rotation:\n" << M;
+
+
+    return 0;
 }       

@@ -2,7 +2,7 @@
 //#include <exception>
 
 namespace {
-constexpr size_t INITIAL_SIZE = 64;
+constexpr size_t INITIAL_SIZE = 10;
 }
 
 /**
@@ -11,21 +11,28 @@ constexpr size_t INITIAL_SIZE = 64;
 template<typename T>
 class ArrayList {
 
-    T* m_data;
-    size_t m_dataSize;
-    size_t m_elementsNum;
+    T* m_data = nullptr;
+    size_t m_dataSize = 0;
+    size_t m_elementsNum = 0;
 
 public:
 
-    ~ArrayList() { delete[] m_data; }
+    ~ArrayList() { 
+        std::cout << "~ArrayList()\n";
+        delete[] m_data; 
+    }
+
 
     // Empty array
-    ArrayList(): m_data(nullptr) {}
-    
-    ArrayList(size_t initialSize) {
-        m_data = new T[initialSize];
-        m_dataSize = initialSize;
-        m_elementsNum = initialSize;
+    ArrayList() {
+        std::cout << "Created new ArrayList()\n";
+    }
+
+    ArrayList(ArrayList&& rhv) {
+        m_data =  rhv.m_data;
+        rhv.m_data = nullptr;;
+        m_dataSize = rhv.m_dataSize;
+        m_elementsNum = rhv.m_elementsNum;
     }
 
     // TODO can it be optimized?
@@ -38,13 +45,35 @@ public:
             m_data[i] = rhv.m_data[i];
         }
     }
+
+    ArrayList& operator=(const ArrayList& rhv) {
+        m_data = new T[rhv.m_dataSize];
+        m_dataSize = rhv.m_dataSize;
+        m_elementsNum = rhv.m_elementsNum;
+
+        for (size_t i = 0; i < m_dataSize; ++i) {
+            m_data[i] = rhv.m_data[i];
+        }
+        return *this;
+    }
+    
+    ArrayList& operator=(ArrayList&& rhv) {
+        m_data =  rhv.m_data;
+        rhv.m_data = nullptr;;
+        m_dataSize = rhv.m_dataSize;
+        m_elementsNum = rhv.m_elementsNum;
+        return *this;
+    }
     // Return an element
     T& 
     operator[](size_t idx) const ;
 
     // Add an element
     void 
-    add(T element);
+    add(const T& element);
+    // Add an element
+    void 
+    add(T&& element);
 
     T& 
     get(size_t idx) const;
@@ -78,12 +107,21 @@ bool ArrayList<T>::idxIsValid(size_t idx) const {
 }
 
 template<typename T>
-void ArrayList<T>::add(T element) {
-    if (m_data && m_elementsNum == m_dataSize) {
+void ArrayList<T>::add(const T& element) {
+    if (nullptr == m_data || m_elementsNum == m_dataSize) {
         resize();
     }
 
     m_data[m_elementsNum++] = element;
+}
+
+template<typename T>
+void ArrayList<T>::add(T&& element) {
+    if (nullptr == m_data || m_elementsNum == m_dataSize) {
+        resize();
+    }
+
+    m_data[m_elementsNum++] = std::move(element);
 }
 
 template <typename T>
@@ -111,11 +149,8 @@ T& ArrayList<T>::get(size_t idx) const {
 template<class T>
 void ArrayList<T>::resize() {
    
-    if (m_dataSize == 0) {
-        m_dataSize = INITIAL_SIZE;
-    }    
-
-    T* new_data = new T[m_dataSize*2];
+    size_t newSize = m_data == nullptr ? INITIAL_SIZE :  m_dataSize * 2;
+    T* new_data = new T[newSize];
 
     for(size_t i = 0; i < m_dataSize; ++i) {
         new_data[i] = m_data[i];
@@ -123,6 +158,6 @@ void ArrayList<T>::resize() {
 
     delete[] m_data;
     m_data = new_data;
-    m_dataSize *= 2;
+    m_dataSize = newSize;
 }
 
