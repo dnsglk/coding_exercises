@@ -2,6 +2,12 @@
 
 using namespace std;
 
+/*
+1. Count spaces in string
+2. Go backwards and 
+    - copy character to (cur_pos + spacesLeft * 2)
+    - if space put substituion to (cur_pos + (spacesLeft -1 ) * 2)
+*/
 void URLify(string& url) {
     
     uint32_t origSize = url.size();
