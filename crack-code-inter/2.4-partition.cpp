@@ -5,9 +5,14 @@ template<class T>
 ListNode<T>* partition(ListNode<T>* head, const T& pivotValue) {
     ListNode<T>* node = head, *prev, * next;
     bool hasReachedPivot = false;
+
+    // for each value less than pivot, move it before current head.
     while(node != nullptr) {
+
         next = node->m_next;
+
         if(node->m_data < pivotValue) {
+            // skip all values that we shouldn't move to the start
             if (hasReachedPivot && node != head) {
                 // move node before head
                 prev->m_next = next;           
@@ -18,6 +23,7 @@ ListNode<T>* partition(ListNode<T>* head, const T& pivotValue) {
             hasReachedPivot = true;
         }
 
+        // if move was performed do not change prev value
         prev = head == node ? prev :  node;
         node = next;
     }
