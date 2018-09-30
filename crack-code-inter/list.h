@@ -10,23 +10,37 @@ public:
     T m_data;
 };
 
-template<class T>
-void printList(ListNode<T>& head) {
-    auto node = &head;
-    while(node != nullptr) {
-        cout << node->m_data << " -> ";
-        node = node->m_next;
-    }   
-    
-    cout << "END\n";
-}
 
 template<class T>
-void freeList(ListNode<T>* head) {
+void free(ListNode<T>* head) {
     ListNode<T>* next;
     while (head != nullptr) {
         next = head->m_next;
         delete head;
         head = next;
     }
+}
+
+template <class T>
+size_t size(const ListNode<T>& head) {
+    size_t size = 0;
+
+    auto node = &head;
+    while(node != nullptr) {
+        ++size;
+        node = node->m_next;
+    }
+
+    return size;
+}
+
+template<class T>
+void print(ListNode<T>& head) {
+    auto node = &head;
+    while(node != nullptr) {
+        cout << node->m_data << " -> ";
+        node = node->m_next;
+    }   
+    
+    cout << "END , size = " << size(head) << endl;
 }

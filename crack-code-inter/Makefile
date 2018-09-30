@@ -9,6 +9,8 @@ GCC=$(GCC_BIN) $(GCC_FLAGS)
 	$(GCC) $?
 2.4: 2.4-partition.cpp
 	$(GCC) $?
+2.5: 2.5-list-sum.cpp
+	$(GCC) $?
 
 .PHONY: 1.6 \
     1.8 \
