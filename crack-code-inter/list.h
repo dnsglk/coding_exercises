@@ -35,7 +35,7 @@ size_t size(const ListNode<T>& head) {
 }
 
 template<class T>
-void print(ListNode<T>& head) {
+void print(const ListNode<T>& head) {
     auto node = &head;
     while(node != nullptr) {
         cout << node->m_data << " -> ";
