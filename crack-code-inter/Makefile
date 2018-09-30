@@ -11,7 +11,9 @@ GCC=$(GCC_BIN) $(GCC_FLAGS)
 	$(GCC) $?
 2.5: 2.5-list-sum.cpp
 	$(GCC) $?
+2.6: 2.6-palindrome.cpp
+	$(GCC) $?
 
-.PHONY: 1.6 \
+#.PHONY: 1.6 \
     1.8 \
     2.4

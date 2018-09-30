@@ -44,3 +44,31 @@ void print(ListNode<T>& head) {
     
     cout << "END , size = " << size(head) << endl;
 }
+
+template <class T>
+ListNode<T>* createListFromInput() {
+    ListNode<T> *node , *prev, *newList;
+    T nodeVal;
+
+    node = prev = nullptr;
+
+    string str;
+    getline(cin, str);
+    ss sList(str);
+
+    while(sList >> nodeVal) {
+        node = new ListNode<T>();
+        node->m_data = nodeVal;
+
+        if (!prev) {
+            newList = node;
+        } else {
+            prev->m_next = node;
+        }
+        prev = node;
+    }
+    return newList;
+}
+
+
+

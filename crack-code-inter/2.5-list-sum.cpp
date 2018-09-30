@@ -1,14 +1,12 @@
 #include "common.h"
 #include "my_data_struct.h"
 
-using list = ListNode<uint32_t>;
-
-uint32_t reverseSum(const list& l1, const list& l2) {
+uint32_t reverseSum(const list_t& l1, const list_t& l2) {
     uint32_t sum = 0, val1 = 0, val2 = 0;
     uint32_t currentDigit = 0;
 
-    const list *  node1 = &l1;
-    const list *  node2 = &l2;
+    const list_t*  node1 = &l1;
+    const list_t*  node2 = &l2;
 
     while (node1 || node2) {
         val1 = node1 ? node1->m_data : 0;
@@ -23,8 +21,8 @@ uint32_t reverseSum(const list& l1, const list& l2) {
     return sum;
 }
 
-uint32_t forwardSum(const list* l1, size_t size1, uint32_t val1,
-                    const list* l2, size_t size2, uint32_t val2, 
+uint32_t forwardSum(const list_t* l1, size_t size1, uint32_t val1,
+                    const list_t* l2, size_t size2, uint32_t val2, 
                     uint32_t& curLevel) 
 {
     ++curLevel;
@@ -35,13 +33,13 @@ uint32_t forwardSum(const list* l1, size_t size1, uint32_t val1,
         return val1 + val2;
     }
 
-    const list* nextL1 = l1->m_next; 
-    const list* nextL2 = l2->m_next; 
+    const list_t* nextL1 = l1->m_next; 
+    const list_t* nextL2 = l2->m_next; 
 
     uint32_t nextval1 = nextL1 ? nextL1->m_data : 0;
     uint32_t nextval2 = nextL2 ? nextL2->m_data : 0;
     
-    // If one of the lists is shorter than do not advance its head and 
+    // If one of the list_t*s is shorter than do not advance its head and 
     // use 0 for the current digits' sum
     if(size1 < size2) {
         if ((size2 - size1) >= curLevel) {
@@ -64,47 +62,20 @@ uint32_t forwardSum(const list* l1, size_t size1, uint32_t val1,
     return pow(10,curLevel++) * (val1 + val2) + sum;
 }
 
-uint32_t forwardSum(const list& l1, const list& l2) {
+uint32_t forwardSum(const list_t& l1, const list_t& l2) {
     uint32_t curLevel = 0;
 
     return forwardSum(&l1, size(l1), l1.m_data,  &l2, size(l2), l2.m_data, curLevel);
 }
 
-void enterLists(list** list1, list** list2) {
-    list *node , *prev ;
-    int32_t digit;
-    for(uint32_t i = 0; i < 2; ++i) {
-        cout << "Enter list #" << i+1 << endl;
-
-        node = prev = nullptr;
-    
-        string str;
-        getline(cin, str);
-        ss sList(str);
-
-        while(sList >> digit) {
-            node = new list;
-            node->m_data = digit;
-            if (!prev) {
-                if (i ==0) {
-                    *list1 = node;
-                } else {
-                    *list2 = node;
-                }
-            } else {
-                prev->m_next = node;
-            }
-            prev = node;
-        }
-    }
-}
-
 int main() {
 
-    list *list1 , *list2 ;
+    list_t *list1 , *list2;
 
-    enterLists(&list1, &list2);
-
+    for(uint32_t i = 0; i < 2; ++i) {
+        cout << "Enter list #" << i+1 << endl;
+        (i == 0 ? list1 : list2)  = createListFromInput<uint32_t>();
+    }
     print(*list1);
     print(*list2);
     
