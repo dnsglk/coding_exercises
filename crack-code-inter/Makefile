@@ -6,8 +6,8 @@ sources=$(shell ls *.cpp)
 targets=$(sources:.cpp=)
 
 all: 
-	echo $(targets)
+	@echo "Available targets: \n$(targets)"
 
 $(targets) : 
-	$(GCC) $(@).cpp
+	$(GCC) -Iinclude $(@).cpp
 
