@@ -2,6 +2,8 @@
 import random
 from binarytree import tree 
 
+PRINT=False
+
 '''
 DOESN'T WORK!!!
 
@@ -15,7 +17,7 @@ def _isBalanced(tree):
     hMax = getMaxHeight(tree)
     hMin = getMinHeight(tree)
 
-    #print "Max height", hMax, " min height ", hMin
+    #print("Max height", hMax, " min height ", hMin)
 
     return True if hMax - hMin <= 1 else False
 
@@ -62,23 +64,19 @@ def getHeight(node):
         return {"is_balanced": True, "height": 0}
 
     results = getHeight(node.left) 
-    hL, is_balanced = results['height'] + 1, results['is_balanced']
+    hL, is_balanced = results['height'], results['is_balanced']
     if not is_balanced:
-        print "Not balanced ", hL, node.value
         return {'height':hL, 'is_balanced': False} 
 
-    results_tupple = getHeight(node.right)
-    hR, is_balanced = results['height'] + 1, results['is_balanced']
+    results = getHeight(node.right)
+    hR, is_balanced = results['height'], results['is_balanced']
     if not is_balanced:
-        print "Not balanced ", hR, node.value
         return {'height':hR, 'is_balanced' : False}
 
     maxH = hL if hL > hR else hR
     balanced =  abs(hL - hR) <= 1
 
-    print node.value, hL, hR, balanced
-
-    return {'height': maxH, 'is_balanced': balanced}
+    return {'height': maxH + 1, 'is_balanced': balanced}
     
 
 def run_algo(iter_num):
@@ -88,10 +86,12 @@ def run_algo(iter_num):
 
         if testTreeIsBalanced != test_tree.is_balanced:
             print(test_tree)
-            print 'Tree is', '' if test_tree.is_balanced else ' not', ' balanced. Manual algo returns ', testTreeIsBalanced
-            print 'Max,min = ', getMaxHeight(test_tree), getMinHeight(test_tree)
-            #return
-    
+            print('Tree is' + ('' if test_tree.is_balanced else ' not') + ' balanced. Manual algo returns {0}'.format(testTreeIsBalanced))
+            print('Max,min = {0}, {1}'.format(getMaxHeight(test_tree),getMinHeight(test_tree)))
+            global PRINT 
+            PRINT = True
+            isBalanced(test_tree)
+            return 
 
 if __name__  == "__main__":
-    run_algo(100)
+    run_algo(1000)
