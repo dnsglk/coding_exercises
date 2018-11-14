@@ -16,22 +16,22 @@ def is_bst_iterative(node):
 
     next_level = Queue()
     if node.left != None:
-        next_level.put((node.left,node))
+        next_level.put((node.left,node.left))
     #check left subtree
     while not next_level.empty():
         cur_tuple = next_level.get()
-        cur_node, parent = cur_tuple[0], cur_tuple[1]
+        cur_node, no_less_than = cur_tuple[0], cur_tuple[1]
 
         # the main check of the level
-        left_child_isnot_bst = cur_node.left != None and cur_node.left.value < parent.value
-        right_child_isnot_bst = cur_node.right != None and cur_node.right.value > node.value
+        left_child_isnot_bst = cur_node.left != None and no_less_than != None
+        left_child_isnot_bst = left_child_isnot_bst and cur_node.left.value < no_less_than.value
 
-        if not node_is_bst_valid(cur_node) or left_child_isnot_bst or right_child_isnot_bst:
+        if not node_is_bst_valid(cur_node) or left_child_isnot_bst or cur_node.value < node.value:
             return False
 
         # Add children for subsequent processsing
         if cur_node.left != None:
-            next_level.put((cur_node.left,cur_node))
+            next_level.put((cur_node.left, None))
         if cur_node.right != None:
             next_level.put((cur_node.right,cur_node))
         
