@@ -5,7 +5,8 @@ from queue import Queue
 import random
 
 def is_bst(node):
-    return is_bst_iterative(node)
+#    return is_bst_iterative(node)
+    return is_bst_recursive(node)
 
 def is_bst_iterative(node):
     if node == None:
@@ -70,7 +71,8 @@ if __name__ == '__main__':
     while True:
         test_tree = tree(is_perfect=False, height=random.randint(0,6))
         bst1,bst2 = test_tree.is_bst, is_bst(test_tree)
-        if bst1 != bst2 or (bst1 and bst2 and test_tree.size > 5):
+        #if bst1 != bst2 or (bst1 and bst2 and test_tree.size > 5):
+        if (bst1 and bst2 and test_tree.size > 5):
             print(test_tree)
             print('Tree is BST = {0}, isBST={1}'.format(bst1, bst2))
             break
