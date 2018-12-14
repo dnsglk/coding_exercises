@@ -17,7 +17,7 @@ class Heap:
         
     def add(self, newVal):
         self.data.append(newVal)
-        self._heapify_(len(self.data)-1)
+        self.__heapify__(len(self.data)-1)
         
     def pop(self):
         if len(self.data) == 0:
@@ -57,7 +57,7 @@ class Heap:
     def top(self):
         return self.data[0]
     
-    def _heapify_(self, idx):
+    def __heapify__(self, idx):
         parentIdx = (idx-1)//2
         while idx != 0 and self.data[idx] > self.data[parentIdx]:
             self.data[idx],self.data[parentIdx] = self.data[parentIdx], self.data[idx] 
@@ -73,16 +73,17 @@ class Solution:
         :type Capital: List[int]
         :rtype: int
         """
-        Capital, Profits = zip(*sorted(zip(Capital, Profits)))
+        projects = [Project(Capital[i],Profits[i]) for i in range(len(Profits))]
+        projects.sort(key=lambda p : p.capital,reverse=False)
                     
         heap = Heap()
         implementedNum = 0
         activeProjects = 0
         
-        while implementedNum != k or activeProjects < len(Capital):
+        while implementedNum != k or activeProjects < len(projects):
             
-            if activeProjects < len(Capital) and Capital[activeProjects] <= W:
-                heap.add(Project(Capital[activeProjects],Profits[activeProjects]))
+            if activeProjects < len(projects) and projects[activeProjects].capital <= W:
+                heap.add(projects[activeProjects])
                 activeProjects = activeProjects + 1
                 continue
 
@@ -99,7 +100,7 @@ class Solution:
 
 if __name__ == '__main__':
     
-    testData = open("test_data_16.txt",'r')
+    testData = open("test_data_31.txt",'r')
     k = int(testData.readline())
     W = int(testData.readline())
 
